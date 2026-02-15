@@ -19,10 +19,13 @@ namespace Bussen
                 });
 
             builder.Services.AddSingleton<IAlertService, AlertService>();
+            builder.Services.AddSingleton<GameService>();
 
             builder.Services.AddSingleton<MainViewModel>();
+            builder.Services.AddTransient<SetupViewModel>();
 
             builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddTransient<SetupViewModel>();
 
 #if DEBUG
     		builder.Logging.AddDebug();

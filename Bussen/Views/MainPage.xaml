@@ -5,15 +5,55 @@
              x:Class="Bussen.Views.MainPage"
              x:DataType="viewmodels:MainViewModel">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <Button
-                Text="Click me" 
-                Command="{Binding ShowAlertCommand}"
-                HorizontalOptions="Fill" />
-        </VerticalStackLayout>
-    </ScrollView>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="WidthRequest" Value="500" />
+                <Setter Property="HeightRequest" Value="100" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize" Value="50" />
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="LightBlue" />
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="PointerOver">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="White" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Column="1" Grid.Row="1" RowDefinitions="auto, auto" RowSpacing="10">
+            <Button Grid.Row="0"
+                    Text="Play"
+                    Command="{Binding PlayCommand}" />
+            <Button Grid.Row="1"
+                    Text="Quit"
+                    Command="{Binding QuitCommand}" />
+        </Grid>
+    </Grid>
 
 </ContentPage>

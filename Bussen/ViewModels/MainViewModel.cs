@@ -1,14 +1,28 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Bussen.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Bussen.ViewModels
 {
+    /// <summary>
+    /// The main viewmodel.
+    /// </summary>
     public partial class MainViewModel : ObservableObject
     {
+        #region Commands
+
         [RelayCommand]
-        private void ShowAlert()
+        private async Task Play()
         {
-            App.AlertService.ShowAlert("Test", "Testing the alert service.");
+            await Shell.Current.GoToAsync(nameof(SetupPage));
         }
+
+        [RelayCommand]
+        private void Quit()
+        {
+            Application.Current!.Quit();
+        }
+
+        #endregion
     }
 }
