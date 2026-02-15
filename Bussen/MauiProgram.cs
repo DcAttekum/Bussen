@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Bussen.Services;
+using Bussen.ViewModels;
+using Bussen.Views;
+using Microsoft.Extensions.Logging;
 
 namespace Bussen
 {
@@ -14,6 +17,12 @@ namespace Bussen
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            builder.Services.AddSingleton<IAlertService, AlertService>();
+
+            builder.Services.AddSingleton<MainViewModel>();
+
+            builder.Services.AddSingleton<MainPage>();
 
 #if DEBUG
     		builder.Logging.AddDebug();
