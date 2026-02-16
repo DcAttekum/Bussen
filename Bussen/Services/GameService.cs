@@ -24,6 +24,11 @@ namespace Bussen.Services
         /// </summary>
         public IList<Card> UsedPile { get; set; }
 
+        /// <summary>
+        /// Contains the settings of the game.
+        /// </summary>
+        public GameSettings Settings { get; set; }
+
         #endregion
 
         #region Constructors
@@ -33,6 +38,16 @@ namespace Bussen.Services
             Players = new List<Player>();
             Deck = new List<Card>();
             UsedPile = new List<Card>();
+            Settings = new GameSettings();
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void StartGame(IList<Player> players, GameSettings settings)
+        {
+
         }
 
         #endregion

@@ -10,6 +10,7 @@ namespace Bussen
 
             Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
             Routing.RegisterRoute(nameof(SetupPage), typeof(SetupPage));
+            Routing.RegisterRoute(nameof(DealPage), typeof(DealPage));
         }
     }
 }

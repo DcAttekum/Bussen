@@ -1,14 +1,267 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Bussen.Models"
              xmlns:viewmodels="clr-namespace:Bussen.ViewModels"
+             xmlns:views="clr-namespace:Bussen.Views"
              x:Class="Bussen.Views.SetupPage"
              x:DataType="viewmodels:SetupViewModel"
-             Title="SetupPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Setup">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="PlayerNameEntry" TargetType="Entry">
+                <Setter Property="FontSize" Value="25" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="#555555" />
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="PointerOver">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="#666666" />
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="Focused">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="#666666" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <Style x:Key="NegativeButton" TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="#550000" />
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="PointerOver">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="#770000" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <Style x:Key="RemovePlayerButton" BaseResourceKey="NegativeButton" TargetType="Button">
+                <Setter Property="WidthRequest" Value="60" />
+                <Setter Property="HeightRequest" Value="60" />
+            </Style>
+
+            <Style x:Key="MinusButton" BaseResourceKey="NegativeButton" TargetType="Button">
+                <Setter Property="WidthRequest" Value="30" />
+                <Setter Property="HeightRequest" Value="30" />
+            </Style>
+
+            <Style x:Key="PositiveButton" TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="#005500" />
+                                </VisualState.Setters>
+                            </VisualState>
+
+                            <VisualState x:Name="PointerOver">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="#007700" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <Style x:Key="PlusButton" BaseResourceKey="PositiveButton" TargetType="Button">
+                <Setter Property="WidthRequest" Value="30" />
+                <Setter Property="HeightRequest" Value="30" />
+            </Style>
+
+            <Style x:Key="Header" TargetType="Label">
+                <Setter Property="FontSize" Value="50" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="Margin" Value="0, 0, 0, 30" />
+            </Style>
+
+            <Style x:Key="SettingPropertyLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+            </Style>
+
+            <Style x:Key="SettingValueLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="Background" Value="#555555" />
+            </Style>
+
+            <Style x:Key="SettingValueBorder" TargetType="Border">
+                <Setter Property="StrokeShape" Value="RoundRectangle 10" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <Grid ColumnDefinitions="*, 3, *" Padding="300, 100" ColumnSpacing="50"
+          RowDefinitions="auto, *">
+
+        <Label Grid.Column="0"
+               Grid.Row="0"
+               Style="{StaticResource Header}"
+               Text="Players" />
+
+        <Label Grid.Column="2"
+               Grid.Row="0"
+               Style="{StaticResource Header}"
+               Text="Settings" />
+
+        <!-- Player list -->
+        <ScrollView Grid.Column="0"
+                    Grid.Row="1">
+            <Grid RowDefinitions="auto, auto, *" RowSpacing="20">
+                <CollectionView Grid.Row="0"
+                                ItemsSource="{Binding Players}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical"
+                                           ItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Player">
+                            <Grid ColumnDefinitions="*, auto" ColumnSpacing="5">
+                                <Entry Grid.Column="0"
+                                       Style="{StaticResource PlayerNameEntry}"
+                                       Text="{Binding Name}" />
+                                <Button Grid.Column="1"
+                                        Style="{StaticResource RemovePlayerButton}"
+                                        ImageSource="trashcan.png"
+                                        Command="{Binding Path=BindingContext.RemovePlayerCommand, Source={RelativeSource AncestorType={x:Type views:SetupPage}}}"
+                                        CommandParameter="{Binding .}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Button Grid.Row="1"
+                        Style="{StaticResource PositiveButton}"
+                        Text="Add player"
+                        Command="{Binding AddPlayerCommand}" />
+            </Grid>
+        </ScrollView>
+
+        <Grid Grid.Column="1"
+              Grid.Row="0"
+              Grid.RowSpan="2"
+              Background="White" />
+
+        <!-- Settings panel -->
+        <ScrollView Grid.Column="2"
+                    Grid.Row="1">
+            <Grid ColumnSpacing="5" RowSpacing="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="3" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Column="1"
+                      Grid.Row="0"
+                      Grid.RowSpan="1"
+                      Background="#333333" />
+
+                <!-- Amount of decks controls -->
+                <Grid Grid.Column="0"
+                      Grid.Row="0"
+                      ColumnDefinitions="auto, *, auto"
+                      RowDefinitions="auto, auto"
+                      ColumnSpacing="5"
+                      RowSpacing="5">
+                    <Label Grid.Column="0"
+                           Grid.Row="0"
+                           Grid.ColumnSpan="3"
+                           Style="{StaticResource SettingPropertyLabel}"
+                           Text="Amount of decks:" />
+                    <Button Grid.Column="0" 
+                            Grid.Row="1"
+                            Style="{StaticResource MinusButton}"
+                            Text="-"
+                            Command="{Binding RemoveDeckCommand}" />
+                    <Border Grid.Column="1"
+                            Grid.Row="1"
+                            Style="{StaticResource SettingValueBorder}">
+                        <Label Style="{StaticResource SettingValueLabel}"
+                               Text="{Binding AmountOfDecks}" />
+                    </Border>
+                    <Button Grid.Column="2"
+                            Grid.Row="1"
+                            Style="{StaticResource PlusButton}"
+                            Text="+"
+                            Command="{Binding AddDeckCommand}" />
+                </Grid>
+                
+                <!-- Amount of jokers controls -->
+                <Grid Grid.Column="2"
+                      Grid.Row="0"
+                      ColumnDefinitions="auto, *, auto"
+                      RowDefinitions="auto, auto"
+                      ColumnSpacing="5"
+                      RowSpacing="5">
+                    <Label Grid.Column="0"
+                           Grid.Row="0"
+                           Grid.ColumnSpan="3"
+                           Style="{StaticResource SettingPropertyLabel}"
+                           Text="Amount of jokers:" />
+                    <Button Grid.Column="0" 
+                            Grid.Row="1"
+                            Text="-"
+                            Style="{StaticResource MinusButton}"
+                            Command="{Binding RemoveJokerCommand}" />
+                    <Border Grid.Column="1"
+                            Grid.Row="1"
+                            Style="{StaticResource SettingValueBorder}">
+                        <Label Style="{StaticResource SettingValueLabel}"
+                               Text="{Binding AmountOfJokers}" />
+                    </Border>
+                    <Button Grid.Column="2"
+                            Grid.Row="1"
+                            Style="{StaticResource PlusButton}"
+                            Text="+"
+                            Command="{Binding AddJokerCommand}" />
+                </Grid>
+
+                <Button Grid.Column="0"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        Style="{StaticResource PositiveButton}"
+                        Text="Play"
+                        Command="{Binding PlayCommand}" />
+            </Grid>
+        </ScrollView>
+    </Grid>
 </ContentPage>

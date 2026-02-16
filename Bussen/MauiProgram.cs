@@ -2,6 +2,7 @@
 using Bussen.ViewModels;
 using Bussen.Views;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Handlers;
 
 namespace Bussen
 {
@@ -23,9 +24,11 @@ namespace Bussen
 
             builder.Services.AddSingleton<MainViewModel>();
             builder.Services.AddTransient<SetupViewModel>();
+            builder.Services.AddTransient<DealViewModel>();
 
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<SetupViewModel>();
+            builder.Services.AddTransient<DealPage>();
 
 #if DEBUG
     		builder.Logging.AddDebug();
