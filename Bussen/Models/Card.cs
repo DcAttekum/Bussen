@@ -7,10 +7,10 @@ namespace Bussen.Models
     /// </summary>
     public enum Suits
     {
-        Heart,
-        Diamond,
-        Spade,
-        Club,
+        Hearts,
+        Diamonds,
+        Spades,
+        Clubs,
         Joker
     }
 
@@ -46,7 +46,7 @@ namespace Bussen.Models
                 }
                 else
                 {
-                    return "FaceDown.png";
+                    return "cardback.png";
                 }
             }
         }
@@ -59,6 +59,7 @@ namespace Bussen.Models
         {
             Suit = suit;
             Index = index;
+            facingUp = false;
         }
 
         #endregion

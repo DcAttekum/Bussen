@@ -33,6 +33,9 @@ namespace Bussen.Services
 
         #region Constructors
 
+        /// <summary>
+        /// The default constructor.
+        /// </summary>
         public GameService()
         {
             Players = new List<Player>();
@@ -47,7 +50,10 @@ namespace Bussen.Services
 
         public void StartGame(IList<Player> players, GameSettings settings)
         {
+            Players = players;
+            Settings = settings;
 
+            Deck = CardService.CreateDeck(settings.AmountOfDecks, settings.AmountOfJokers);
         }
 
         #endregion

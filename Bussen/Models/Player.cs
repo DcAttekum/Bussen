@@ -13,14 +13,23 @@ namespace Bussen.Models
         [ObservableProperty]
         private ObservableCollection<Card> cards;
 
+        public bool NotMaxCards => Cards.Count < 4;
+
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        /// The default player constructor.
+        /// </summary>
         public Player()
         {
             name = string.Empty;
             cards = [];
+            Cards.CollectionChanged += (_, __) =>
+            {
+                OnPropertyChanged(nameof(NotMaxCards));
+            };
         }
 
         #endregion

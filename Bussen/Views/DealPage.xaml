@@ -1,14 +1,96 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Bussen.Views"
              xmlns:viewmodels="clr-namespace:Bussen.ViewModels"
+             xmlns:models="clr-namespace:Bussen.Models"
+             x:Name="DealPageRoot"
              x:Class="Bussen.Views.DealPage"
              x:DataType="viewmodels:DealViewModel"
-             Title="Dealing">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Shell.NavBarIsVisible="False"
+             Title="DealPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/Common.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style x:Key="PlayerName" TargetType="Label">
+                <Setter Property="Margin" Value="10, 0" />
+                <Setter Property="FontSize" Value="23" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <Style x:Key="Background" TargetType="Border">
+                <Setter Property="StrokeShape" Value="RoundRectangle 10" />
+                <Setter Property="Background" Value="#555555" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="*, auto">
+        <CollectionView Grid.Column="0"
+                        ItemsSource="{Binding Players}">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                 Span="3"
+                                 HorizontalItemSpacing="5"
+                                 VerticalItemSpacing="5" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Player">
+                    <Border Style="{StaticResource Background}"
+                            WidthRequest="510">
+                        <Grid ColumnDefinitions="auto, auto, *"
+                              RowDefinitions="auto, *"
+                              HeightRequest="225">
+                            <Label Grid.Column="0"
+                                   Grid.Row="0"
+                                   Grid.ColumnSpan="3"
+                                   Style="{StaticResource PlayerName}"
+                                   Text="{Binding Name}" />
+                            
+                            <CollectionView Grid.Column="0"
+                                            Grid.Row="1"
+                                            HeightRequest="170"
+                                            ItemsSource="{Binding Cards}">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Horizontal"
+                                                       ItemSpacing="5" />
+                                </CollectionView.ItemsLayout>
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Card">
+                                        <Image Source="{Binding Image}" />
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                            <ImageButton Grid.Column="1"
+                                         Grid.Row="1"
+                                         Margin="5"
+                                         HeightRequest="170"
+                                         IsVisible="{Binding NotMaxCards}"
+                                         Source="cardback.png"
+                                         Command="{Binding Path=BindingContext.DealCardToPlayerCommand, Source={x:Reference DealPageRoot}}"
+                                         CommandParameter="{Binding .}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Border Grid.Column="1"
+                Style="{StaticResource Background}"
+                Margin="5"
+                WidthRequest="340">
+            <VerticalStackLayout >
+                <Button Text="Next"
+                        Margin="10"
+                        Style="{StaticResource PositiveButton}"
+                        Command="{Binding NextStageCommand}" />
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
 </ContentPage>
