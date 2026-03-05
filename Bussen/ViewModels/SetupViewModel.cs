@@ -46,6 +46,11 @@ namespace Bussen.ViewModels
             if (Players.Count < 12)
             {
                 Players.Add(new Player());
+
+                if (Players.Count >= 10 && AmountOfDecks < 2)
+                {
+                    AmountOfDecks++;
+                }
             }
             else
             {
@@ -78,7 +83,8 @@ namespace Bussen.ViewModels
         [RelayCommand]
         private void RemoveDeck()
         {
-            if (AmountOfDecks > 1)
+            if ((AmountOfDecks > 1 && Players.Count < 10) || 
+                (AmountOfDecks > 2))
             {
                 AmountOfDecks--;
             }
@@ -134,6 +140,53 @@ namespace Bussen.ViewModels
             {
                 App.AlertService.ShowAlert("Error", "An error occurred while trying to start the game!");
             }
+        }
+
+        #endregion
+
+        #region Debugging
+
+        [RelayCommand]
+        private void AddSomePlayers()
+        {
+#if DEBUG
+            while (Players.Count < 5)
+            {
+                Players.Add(new Player());
+            }
+
+            Players[0].Name = "Eleanor";
+            Players[1].Name = "Henry";
+            Players[2].Name = "Margaret";
+            Players[3].Name = "Victoria";
+            Players[4].Name = "Samuel";
+#endif
+        }
+
+        [RelayCommand]
+        private void AddMaxPlayers()
+        {
+#if DEBUG
+            while (Players.Count < 12)
+            {
+                Players.Add(new Player());
+            }
+
+            Players[0].Name = "Eleanor";
+            Players[1].Name = "Henry";
+            Players[2].Name = "Margaret";
+            Players[3].Name = "Victoria";
+            Players[4].Name = "Samuel";
+            Players[5].Name = "Thomas";
+            Players[6].Name = "Caroline";
+            Players[7].Name = "William";
+            Players[8].Name = "Seraphine";
+            Players[9].Name = "Alaric";
+            Players[10].Name = "Thalion";
+            Players[11].Name = "Jace";
+
+            AmountOfDecks = 2;
+#endif
         }
 
         #endregion

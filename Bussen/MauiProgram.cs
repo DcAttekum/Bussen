@@ -25,10 +25,12 @@ namespace Bussen
             builder.Services.AddSingleton<MainViewModel>();
             builder.Services.AddTransient<SetupViewModel>();
             builder.Services.AddTransient<DealViewModel>();
+            builder.Services.AddTransient<ShareViewModel>();
 
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<SetupViewModel>();
             builder.Services.AddTransient<DealPage>();
+            builder.Services.AddTransient<SharePage>();
 
 #if DEBUG
     		builder.Logging.AddDebug();

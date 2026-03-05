@@ -1,5 +1,6 @@
 ﻿using Bussen.Models;
 using Bussen.Services;
+using Bussen.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
@@ -34,20 +35,12 @@ namespace Bussen.ViewModels
         {
             players = [];
 
-            var service = App.Services.GetService<GameService>();
-            if (service != null)
-            {
-                gameService = service;
-                gameService.Deck = gameService.Deck.Shuffle().ToList();
+            gameService = App.Services.GetService<GameService>() ?? throw new ArgumentNullException("Game service cannot be found.");
+            gameService.Deck = gameService.Deck.Shuffle().ToList();
 
-                foreach (var player in gameService.Players)
-                {
-                    Players.Add(player);
-                }
-            }
-            else
+            foreach (var player in gameService.Players)
             {
-                throw new NullReferenceException("Error finding game service.");
+                Players.Add(player);
             }
         }
 
@@ -68,8 +61,10 @@ namespace Bussen.ViewModels
             }
         }
 
+        // TODO: Handle removal of jokers.
+
         [RelayCommand]
-        private void NextStage()
+        private async Task NextStage()
         {
             bool finished = true;
 
@@ -84,12 +79,34 @@ namespace Bussen.ViewModels
 
             if (finished)
             {
-                // TODO: Move to next stage logic
+                await Shell.Current.GoToAsync(nameof(SharePage));
             }
             else
             {
                 App.AlertService.ShowAlert("Players need cards", "Some players still need one or more cards!");
             }
+        }
+
+        #endregion
+
+        #region Debugging
+
+        [RelayCommand]
+        private void AddCards()
+        {
+#if DEBUG
+            foreach (var player in Players)
+            {
+                while (player.NotMaxCards)
+                {
+                    var card = gameService.Deck.First();
+                    gameService.Deck.Remove(card);
+
+                    card.FacingUp = true;
+                    player.Cards.Add(card);
+                }
+            }
+#endif
         }
 
         #endregion

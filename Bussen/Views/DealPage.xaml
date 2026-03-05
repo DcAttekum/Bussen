@@ -14,16 +14,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Styles/Common.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <Style x:Key="PlayerName" TargetType="Label">
                 <Setter Property="Margin" Value="10, 0" />
                 <Setter Property="FontSize" Value="23" />
                 <Setter Property="FontAttributes" Value="Bold" />
-            </Style>
-
-            <Style x:Key="Background" TargetType="Border">
-                <Setter Property="StrokeShape" Value="RoundRectangle 10" />
-                <Setter Property="Background" Value="#555555" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -90,6 +85,11 @@
                         Margin="10"
                         Style="{StaticResource PositiveButton}"
                         Command="{Binding NextStageCommand}" />
+                
+                <Button Text="All Cards"
+                        Margin="10"
+                        Style="{StaticResource DebugButton}"
+                        Command="{Binding AddCardsCommand}" />
             </VerticalStackLayout>
         </Border>
     </Grid>
