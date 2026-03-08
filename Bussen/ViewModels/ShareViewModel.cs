@@ -1,5 +1,6 @@
 ﻿using Bussen.Models;
 using Bussen.Services;
+using Bussen.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
@@ -50,7 +51,7 @@ namespace Bussen.ViewModels
             }
 
             players = [];
-            foreach (var player in gameService.Players)
+            foreach (var player in gameService.ActivePlayers)
             {
                 Players.Add(player);
             }
@@ -108,7 +109,7 @@ namespace Bussen.ViewModels
                     {
                         gameService.DiscardPile.Add(data.Card);
                         data.Player.Cards.Remove(data.Card);
-                        break;
+                        return;
                     }
                 }
             }
@@ -134,6 +135,24 @@ namespace Bussen.ViewModels
             }
 
             MatchingCard = false;
+        }
+
+        private bool AllCardsTurned()
+        {
+            var returnValue = true;
+
+            foreach (var row in Pyramid)
+            {
+                foreach (var card in row)
+                {
+                    if (!card.FacingUp)
+                    {
+                        returnValue = false;
+                    }
+                }
+            }
+
+            return returnValue;
         }
 
         #endregion
@@ -234,6 +253,101 @@ namespace Bussen.ViewModels
             }
         }
 
+        [RelayCommand]
+        private async Task ToBus()
+        {
+            if (AllCardsTurned())
+            {
+                int mostCards = 0;
+                foreach (var player in Players)
+                {
+                    if (player.Cards.Count > mostCards)
+                    {
+                        mostCards = player.Cards.Count;
+                    }
+                }
+
+                foreach (var player in Players)
+                {
+                    if (player.Cards.Count != mostCards)
+                    {
+                        gameService.ActivePlayers.Remove(player);
+                    }
+                }
+
+                gameService.RemoveAllCardsFromPlayers();
+                gameService.DiscardPileBackToDeck();
+                gameService.Deck = gameService.Deck.Shuffle().ToList();
+
+                if (gameService.ActivePlayers.Count > 1)
+                {
+                    await Shell.Current.GoToAsync(nameof(BusPage));
+                }
+                else
+                {
+                    await Shell.Current.GoToAsync(nameof(DrawPage));
+                }
+            }
+        }
+
         #endregion
+
+        #region Debugging
+
+        [RelayCommand]
+        private void TurnAllCards()
+        {
+#if DEBUG
+            foreach (var row in Pyramid)
+            {
+                foreach (var card in row)
+                {
+                    TurnCard(card);
+                }
+            }
+#endif
+        }
+
+        [RelayCommand]
+        private void ProcessAllCards()
+        {
+#if DEBUG
+            foreach (var player in Players)
+            {
+                IList<Card> toRemove = [];
+
+                foreach (var card in player.Cards)
+                {
+                    if (card.Matches)
+                    {
+                        toRemove.Add(card);
+                    }
+                }
+
+                foreach (var card in toRemove)
+                {
+                    RemoveMatchingCardFromPlayer(new PlayerCard(player, card));
+                }
+            }
+#endif
+        }
+
+        [RelayCommand]
+        private void ForceDraw()
+        {
+#if DEBUG
+            foreach (var player in Players)
+            {
+                foreach(var card in player.Cards)
+                {
+                    gameService.DiscardPile.Add(card);
+                }
+
+                player.Cards.Clear();
+            }
+#endif
+        }
+
+#endregion
     }
 }

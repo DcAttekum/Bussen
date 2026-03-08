@@ -4,6 +4,7 @@
              xmlns:views="clr-namespace:Bussen.Views"
              xmlns:viewmodels="clr-namespace:Bussen.ViewModels"
              xmlns:models="clr-namespace:Bussen.Models"
+             xmlns:converters="clr-namespace:Bussen.Converters"
              x:Name="DealPageRoot"
              x:Class="Bussen.Views.DealPage"
              x:DataType="viewmodels:DealViewModel"
@@ -20,6 +21,8 @@
                 <Setter Property="FontSize" Value="23" />
                 <Setter Property="FontAttributes" Value="Bold" />
             </Style>
+
+            <converters:PlayerCardConverter x:Key="PlayerCardConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -57,7 +60,15 @@
 
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate x:DataType="models:Card">
-                                        <Image Source="{Binding Image}" />
+                                        <ImageButton Source="{Binding Image}"
+                                                     Command="{Binding Path=BindingContext.RemoveJokerCommand, Source={x:Reference DealPageRoot}}">
+                                            <ImageButton.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource PlayerCardConverter}">
+                                                    <Binding Path="BindingContext" Source="{RelativeSource AncestorType={x:Type CollectionView}, AncestorLevel=1}" />
+                                                    <Binding />
+                                                </MultiBinding>
+                                            </ImageButton.CommandParameter>
+                                        </ImageButton>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>

@@ -134,6 +134,8 @@ namespace Bussen.ViewModels
                     AmountOfDecks = AmountOfDecks,
                     AmountOfJokers = AmountOfJokers
                 });
+                service.ActivePlayers = service.Players;
+
                 await Shell.Current.GoToAsync(nameof(DealPage));
             }
             else

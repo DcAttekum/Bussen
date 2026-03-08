@@ -38,7 +38,7 @@ namespace Bussen.ViewModels
             gameService = App.Services.GetService<GameService>() ?? throw new ArgumentNullException("Game service cannot be found.");
             gameService.Deck = gameService.Deck.Shuffle().ToList();
 
-            foreach (var player in gameService.Players)
+            foreach (var player in gameService.ActivePlayers)
             {
                 Players.Add(player);
             }
@@ -61,7 +61,15 @@ namespace Bussen.ViewModels
             }
         }
 
-        // TODO: Handle removal of jokers.
+        [RelayCommand]
+        private void RemoveJoker(PlayerCard data)
+        {
+            if (data.Card.Suit == Suits.Joker)
+            {
+                gameService.DiscardPile.Add(data.Card);
+                data.Player.Cards.Remove(data.Card);
+            }
+        }
 
         [RelayCommand]
         private async Task NextStage()

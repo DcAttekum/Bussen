@@ -48,11 +48,11 @@
     </ContentPage.Resources>
     
     <Grid ColumnDefinitions="*, auto"
-          RowDefinitions="auto, *">
+          RowDefinitions="auto, auto, *">
         <!-- Pyramid view -->
         <Border Grid.Column="0"
                 Grid.Row="0"
-                Grid.RowSpan="2"
+                Grid.RowSpan="3"
                 Margin="10"
                 Style="{StaticResource Background}">
             <CollectionView Margin="10"
@@ -164,9 +164,34 @@
             </Grid>
         </Border>
 
+        <Grid Grid.Column="1"
+              Grid.Row="1"
+              ColumnDefinitions="*, *, *">
+            <Button Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="10"
+                    Text="Turn all cards"
+                    Style="{StaticResource DebugButton}"
+                    Command="{Binding TurnAllCardsCommand}" />
+
+            <Button Grid.Column="1"
+                    Grid.Row="1"
+                    Margin="10"
+                    Text="Process all cards"
+                    Style="{StaticResource DebugButton}"
+                    Command="{Binding ProcessAllCardsCommand}" />
+
+            <Button Grid.Column="2"
+                    Grid.Row="1"
+                    Margin="10"
+                    Text="Force draw"
+                    Style="{StaticResource DebugButton}"
+                    Command="{Binding ForceDrawCommand}" />
+        </Grid>
+
         <!-- Player cards -->
         <Border Grid.Column="1"
-                Grid.Row="1"
+                Grid.Row="2"
                 Style="{StaticResource RightBackground}">
             <CollectionView ItemsSource="{Binding Players}">
                 <CollectionView.ItemsLayout>

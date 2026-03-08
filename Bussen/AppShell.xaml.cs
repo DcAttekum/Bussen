@@ -12,6 +12,8 @@ namespace Bussen
             Routing.RegisterRoute(nameof(SetupPage), typeof(SetupPage));
             Routing.RegisterRoute(nameof(DealPage), typeof(DealPage));
             Routing.RegisterRoute(nameof(SharePage), typeof(SharePage));
+            Routing.RegisterRoute(nameof(DrawPage), typeof(DrawPage));
+            Routing.RegisterRoute(nameof(BusPage), typeof(BusPage));
         }
     }
 }

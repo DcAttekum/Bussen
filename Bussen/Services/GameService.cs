@@ -15,6 +15,11 @@ namespace Bussen.Services
         public IList<Player> Players { get; set; }
 
         /// <summary>
+        /// The active players in the game right now.
+        /// </summary>
+        public IList<Player> ActivePlayers { get; set; }
+
+        /// <summary>
         /// The cards currently in the deck.
         /// </summary>
         public IList<Card> Deck { get; set; }
@@ -124,6 +129,36 @@ namespace Bussen.Services
                     DiscardPile.Add(card);
                 }
             }
+        }
+
+        public void RemoveAllCardsFromPlayers(bool backToDeck = false)
+        {
+            foreach (var player in Players)
+            {
+                foreach (var card in player.Cards)
+                {
+                    if (backToDeck)
+                    {
+                        Deck.Add(card);
+                    }
+                    else
+                    {
+                        DiscardPile.Add(card);
+                    }
+                }
+
+                player.Cards.Clear();
+            }
+        }
+
+        public void DiscardPileBackToDeck()
+        {
+            foreach (var card in DiscardPile)
+            {
+                Deck.Add(card);
+            }
+
+            DiscardPile.Clear();
         }
 
         #endregion

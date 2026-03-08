@@ -26,11 +26,15 @@ namespace Bussen
             builder.Services.AddTransient<SetupViewModel>();
             builder.Services.AddTransient<DealViewModel>();
             builder.Services.AddTransient<ShareViewModel>();
+            builder.Services.AddTransient<DrawViewModel>();
+            builder.Services.AddTransient<BusViewModel>();
 
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<SetupViewModel>();
             builder.Services.AddTransient<DealPage>();
             builder.Services.AddTransient<SharePage>();
+            builder.Services.AddTransient<DrawPage>();
+            builder.Services.AddTransient<BusPage>();
 
 #if DEBUG
     		builder.Logging.AddDebug();
