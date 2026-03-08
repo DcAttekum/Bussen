@@ -140,7 +140,8 @@
                 <Button Grid.Column="2"
                         Grid.Row="0"
                         Text="To Bus"
-                        Style="{StaticResource AddButton}" />
+                        Style="{StaticResource AddButton}"
+                        Command="{Binding ToBusCommand}" />
 
                 <Border Grid.Column="2"
                         Grid.Row="1"
